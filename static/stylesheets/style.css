@@ -30,10 +30,12 @@ a { outline: none; }
 }
 #logo {
   position:absolute;
-  top:2.5em;
-  left:900px;
+  top:3.5em;
+  left:850px;
 }
-
+#header {
+  margin-bottom:1em;
+}
 
 
 /* -------------------------------------------------------------- 
@@ -207,4 +209,12 @@ ul.tabs { display: block; }
 	-webkit-border-radius: 1em;	
 	-webkit-box-shadow: 0.1em 0em 0.3em #888;
 	
+}
+
+#posts .post .author {
+  color:#8FB;
+  font-weight:bold;
+}
+#posts .post .timestamp {
+  color:#4B8;
 }

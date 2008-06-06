@@ -1,6 +1,10 @@
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
+try:
+  from django import newforms as forms
+except ImportError:
+  from django import forms
 
 class User(db.Model):
   owner = db.UserProperty()
@@ -29,6 +33,7 @@ class Post(db.Model):
   modified = db.DateTimeProperty(auto_now_add=True)
   
 class PostForm(djangoforms.ModelForm):
+  body = forms.CharField(widget=forms.TextInput(attrs={'size':'60','maxlength':'140','label':'Talk'} ))
   class Meta:
     model = Post
     exclude = ['conversation', 'author','owner', 'created', 'modified']
