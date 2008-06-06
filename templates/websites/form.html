@@ -1,0 +1,15 @@
+{% extends base_template %}
+{% block body %}
+
+<h2>Add your Website!</h2>
+<form action="{%url controllers.websites.edit website.key.id%}" method="post" id="talk-websites-form">
+  
+  {{form}}
+  
+  <div>
+    <input type="submit" value="Save" />
+  </div>
+
+</form>
+
+{%endblock%}

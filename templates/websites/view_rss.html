@@ -1,0 +1,19 @@
+{% extends base_template %}
+{% block body %}
+
+{% if website.greetings %}
+  {% for greeting in website.greetings %} 
+    <item>
+      <title>{{ greeting.author }} on {{ greeting.created|date:"F jS f a" }}</title>
+      <link>{% url controllers.websites.view websites.key.id %}</link>
+      <pubDate>{{ greeting.created }}</pubDate>
+      <description>
+        {{ greeting.content|escape }}
+      </description>
+    </item>
+  {% endfor %}
+{% else %} 
+  <item>No greetings yet.</item>
+{% endif %}
+
+{% endblock %}

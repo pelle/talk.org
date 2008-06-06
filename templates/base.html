@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>{% block title %}Talk.org{% endblock %}</title>
+	  <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
+	  <!--[if lte IE 6]><link rel="stylesheet" href="/stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"><![endif]-->
+    </style>
+  </head>
+	<body>
+		<div id="logo"><a href="/"><img src="/images/logo.png"></a></div>
+		<div id="page">
+		  <div id="header">
+		    <ul class="tabs">
+			    {%if user %}
+          <li><strong>{{user.nickname}} &lt;{{user.email}}&gt;</strong></li>
+          {%if is_admin%} <li> <a href="/_ah/admin">Admin</a></li>{%endif%}
+          {%if sign_out%} <li><a href="{{sign_out}}">Sign out</a></li>{%endif%}
+          {% else %}
+          {%if sign_in%}<li><a href="{{sign_in}}">Sign in</a></li>{%endif%}
+          {%endif%}
+   		    </ul>
+		  </div>
+
+		  <div id="body" class="wrapper">
+	    {% block body %}{% endblock %}
+			</div>
+	    <div id="footer">
+		    {% block footer %}
+				&copy; 2008 <a href="http://stakeventures.com">Stake Ventures Inc.</a> This code is highly experimental and whatever posts you create will likely be deleted.
+	    	{% endblock %}
+			</div>
+		</div>
+    {% ifequal BUILD 'development' %}
+    <script type="text/javascript" src="/javascripts/jquery-latest.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="/javascripts/talk.js"></script>
+    {% else %}
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/talk_compiled.{{ CURRENT_VERSION_ID }}.js"></script>
+    {% endifequal %}
+    <script type="text/javascript">
+    </script>
+  </body>
+</html>

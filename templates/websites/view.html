@@ -1,0 +1,51 @@
+{% extends base_template %}
+{% block body %}
+
+<!--
+<ol id="talk-crumb">
+  <li>
+    <a href="/websites">Websites</a> →
+  </li>
+  <li>
+    View
+  </li>
+</ol>
+-->
+
+<div id="talk-websites-view">
+  <a id="talk-website-sign" href="{% url controllers.greetings.create website.key.id %}">Sign this Guestbook!</a>
+  
+  <h2>
+    {{ website.name|escape }}
+  </h2>
+  <div>
+    <a href="{{website.url}}">{{website.url}}</a>
+  </div>
+  <cite>Added by {{ website.owner }}</cite>
+  {% if website.description %}
+  <p>
+    {{website.description}}
+  </p>
+  {% endif %}
+
+  <div id="talk-greetings">
+    <ul>
+    {% if website.greetings %}
+      {% for greeting in website.greetings %}
+        <li>
+          <cite>{{ greeting.author }}</cite>
+          on {{ greeting.created|date:"F jS f a" }} 
+          
+          <p>
+            {{ greeting.content|escape }}
+          </p>
+        </li>
+      {% endfor %}
+    {% else %} 
+      <li>No greetings yet.</li>
+    {% endif %}
+    </ul>
+  </div>
+</div>
+  
+{%endblock%}

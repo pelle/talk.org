@@ -1,0 +1,40 @@
+{% extends base_template %}
+{% block body %}
+<div id="talk-websites-index" class="g-section g-tpl-280-alt">
+  <div class="g-unit g-first">
+    <div class="talk-sidebox">
+      <a href="{% url controllers.websites.create %}">Add Your Website!</a>
+      <ul>
+        <li>Receive friendly notes</li>
+        <li>Track notes via RSS</li>
+        <li>Add content to your site!</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div id="talk-websites" class="g-unit">
+    <ul>
+    {% if websites.count %}
+      {% for website in websites %}
+        <li>
+          <h2>
+            <a href="{% url controllers.websites.view website.key.id %}">{{website.name|escape}}</a>
+          </h2>
+          by {{ website.owner }}</cite>
+          <div>
+            <a href="{{website.url}}">{{website.url}}</a>
+          </div>
+          {% if website.description %}
+          <p>
+            {{website.description}}
+          </p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    {% else %}
+      <li>Ain't no websites yet.</li>
+    {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

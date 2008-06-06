@@ -1,0 +1,23 @@
+{% extends base_template %}
+{% block body %}
+
+<div id="posts">
+	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
+
+	  {{form.as_p}}
+
+
+	</form>
+	{% for post in posts %}
+	<div class="post">
+		{{post.body}}
+		<span class="author">
+			{{post.owner}}
+		</span>
+		<span class="timestamp">
+			{{post.created}}
+		</span>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
