@@ -16,7 +16,7 @@
 	{%endif%}
 	{% for post in posts %}
 	<div class="post">
-		{{post.body}}
+		{{post.body|urlize}}
 		<span class="author">
 			{{post.owner}}
 		</span>

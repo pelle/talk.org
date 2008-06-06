@@ -20,6 +20,7 @@ urlpatterns = patterns(
   (r'^$', 'controllers.posts.index'),
  # (r'^pages/(.*)$', 'views.static'),
   (r'^create$', 'controllers.posts.create'),
+  (r'^archives/(.*)$', 'controllers.neubia.redirect'),
 #  (r'^posts/edit/(\d+)$', 'controllers.posts.edit'),
 #  (r'^users/$', 'controllers.users.index'),
 #  (r'^users/create$', 'controllers.users.create'),

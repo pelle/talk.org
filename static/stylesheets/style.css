@@ -210,6 +210,9 @@ ul.tabs { display: block; }
 	-webkit-box-shadow: 0.1em 0em 0.3em #888;
 	
 }
+#posts .post a {
+  color: #DD0;
+}
 
 #posts .post .author {
   color:#8FB;
