@@ -2,6 +2,7 @@ import os
 import logging
 
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
@@ -20,7 +21,9 @@ from models import PostForm
 def index(request):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-  posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20")
+  posts = memcache.get("latest_posts")
+  if posts is None:
+    posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20")
 #  websites = db.GqlQuery("SELECT * FROM Website ORDER BY created DESC LIMIT 5")
   form = PostForm(None)
   return views.respond(request, user, 'posts/index',
@@ -63,7 +66,7 @@ def create(request):
     
   post.owner = user
   post.put()
-  
+  memcache.delete("latest_posts")
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')
 
