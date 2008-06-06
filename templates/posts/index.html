@@ -2,12 +2,18 @@
 {% block body %}
 
 <div id="posts">
+	{%if user %}
 	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
 
 	  {{form.as_p}}
 
 
 	</form>
+	{% else %}
+	<p>
+		No need to register just <a href="{{sign_in}}">Sign in</a> using your Google Account to post.
+	</p>
+	{%endif%}
 	{% for post in posts %}
 	<div class="post">
 		{{post.body}}

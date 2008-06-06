@@ -2,9 +2,12 @@
 <html>
   <head>
     <title>{% block title %}Talk.org{% endblock %}</title>
-	  <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
+    {% ifequal BUILD 'development' %}
+	  <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" charset="utf-8"/>
+    {% else %}
+    <link rel="stylesheet" href="/stylesheets/talk_compiled.{{ CURRENT_VERSION_ID }}.css" type="text/css" media="screen" charset="utf-8"/>
+    {% endifequal %}
 	  <!--[if lte IE 6]><link rel="stylesheet" href="/stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"><![endif]-->
-    </style>
   </head>
 	<body>
 		<div id="logo"><a href="/"><img src="/images/logo.png"></a></div>
