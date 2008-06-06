@@ -1,3 +1,5 @@
+#!/usr/bin/python2.4
+#
 # Copyright 2008 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""This file acts as a very minimal replacement for the 'imp' module.
 
-from django.conf.urls.defaults import *
+It contains only what Django expects to use and does not actually implement the
+same functionality as the real 'imp' module.
+"""
 
-urlpatterns = patterns(
-  '',
-  (r'^$', 'controllers.posts.index'),
- # (r'^pages/(.*)$', 'views.static'),
-  (r'^create$', 'controllers.posts.create'),
-#  (r'^posts/edit/(\d+)$', 'controllers.posts.edit'),
-#  (r'^users/$', 'controllers.users.index'),
-#  (r'^users/create$', 'controllers.users.create'),
-#  (r'^users/edit/(\d+)$', 'controllers.users.edit'),
-#  (r'^users/view/(\d+)$', 'controllers.users.view'),
-#  (r'^users/test$', 'controllers.users.test'),
-#  (r'^users/view/(\d+)/(\d+)$', 'controllers.users.view'),
-)
+
+def find_module(name, path=None):
+  """Django needs imp.find_module, but it works fine if nothing is found."""
+  raise ImportError

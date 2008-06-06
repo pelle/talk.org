@@ -27,8 +27,12 @@ import sys
 import logging
 import __builtin__
 
-# Google App Hosting imports.
+from appengine_django import InstallAppengineHelperForDjango
+InstallAppengineHelperForDjango()
+
+# Google App Engine imports.
 from google.appengine.ext.webapp import util
+
 
 import pickle
 sys.modules['cPickle'] = pickle
@@ -51,6 +55,7 @@ try:
   from django import v0_96 as django
 except ImportError:
   pass
+
 
 # Import the part of Django that we use here.
 import django.core.handlers.wsgi

@@ -65,7 +65,7 @@ ADMIN_MEDIA_PREFIX = '/media/'
 APPEND_SLASH = False
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'talkzzzzzzheeeeere'
+SECRET_KEY = 'KHm22FwsS4FDf6u9gyvWUA'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
