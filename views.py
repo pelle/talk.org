@@ -23,7 +23,7 @@ from django import shortcuts
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.template import loader, Context
-
+from models import Profile
 
 def respond(request, user, template, params=None):
   """Helper to render a response, passing standard stuff to the response.
@@ -52,6 +52,8 @@ def respond(request, user, template, params=None):
     params['sign_out'] = users.CreateLogoutURL('/')
     params['is_admin'] = (users.IsCurrentUserAdmin() and
                           'Dev' in os.getenv('SERVER_SOFTWARE'))
+                          
+    params['current_profile']=Profile.gql("where user=:1",user).get()
   else:
     params['sign_in'] = users.CreateLoginURL(request.path)
     

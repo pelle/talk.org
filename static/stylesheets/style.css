@@ -208,7 +208,6 @@ ul.tabs { display: block; }
 	-moz-border-radius: 1em;
 	-webkit-border-radius: 1em;	
 	-webkit-box-shadow: 0.1em 0em 0.3em #888;
-	
 }
 #posts .post a {
   color: #DD0;
@@ -218,6 +217,9 @@ ul.tabs { display: block; }
   color:#8FB;
   font-weight:bold;
 }
+#posts .post .author a {
+  color:#8FB;
+}
 #posts .post .timestamp {
   color:#4B8;
 }
@@ -225,3 +227,23 @@ ul.tabs { display: block; }
 #posts form.vform p label[for=id_body] {
   display:none;
 }
+#users {
+  font-size: 2em;
+  margin-bottom: 1em;
+  padding: 1em;
+  color: white;
+  background: #048;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;	
+	-webkit-box-shadow: 0.1em 0em 0.3em #888;
+}
+#users a {
+  color: #8BF
+}
+#users .post_count {
+  color: white
+}
+#users .timestamp {
+  color:#48B;
+}
+

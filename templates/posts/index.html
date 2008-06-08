@@ -18,7 +18,13 @@
 	<div class="post">
 		{{post.body|urlize}}
 		<span class="author">
-			{{post.owner}}
+			{%if post.author%}
+				<a href="{%url controllers.profiles.show post.author.key%}">
+				{{post.author.nick}}
+				</a>
+			{%else%}
+				{{post.owner}}
+			{%endif%}
 		</span>
 		<span class="timestamp">
 			{{post.created|timesince}} ago

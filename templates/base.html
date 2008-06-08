@@ -15,9 +15,19 @@
 		  <div id="header">
 		    <ul class="tabs">
 			    {%if user %}
-          <li><strong>{{user.nickname}} &lt;{{user.email}}&gt;</strong></li>
+          <li><strong>
+						{%if current_profile%}
+							<a href="{%url controllers.profiles.show current_profile.key%}">{{current_profile.nick}}</a>
+						{%else%}
+							{{user.nickname}} 
+						{%endif%}
+	
+	
+						&lt;{{user.email}}&gt;</strong></li>
           {%if is_admin%} <li> <a href="/_ah/admin">Admin</a></li>{%endif%}
+					<li><a href="{%url controllers.profiles.index%}">Latest Users</a></li>					
           {%if sign_out%} <li><a href="{{sign_out}}">Sign out</a></li>{%endif%}
+					
           {% else %}
           {%if sign_in%}<li><a href="{{sign_in}}">Sign in</a></li>{%endif%}
           {%endif%}

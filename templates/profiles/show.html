@@ -1,0 +1,32 @@
+{% extends base_template %}
+{% block body %}
+<div class="user" id="users">
+<h1>{{profile.nick}}</h1>
+{%ifequal profile.user user%}
+<a href="{%url controllers.profiles.edit%}">Edit</a>
+{%endifequal%}
+
+{%if profile.description%}
+	<div class="description">
+	{{profile.description|urlize}}
+	</div>
+{%endif%}
+{%if profile.url%}
+<a href="{{profile.url}}" rel="me">{{profile.url}}</a>
+{%endif%}
+</div>
+<div id="posts">
+	<h3>{{profile.postCount}} posts</h3>
+	{% for post in posts %}
+	<div class="post">
+		{{post.body|urlize}}
+		<span class="author">
+			{{post.author.nick}}
+		</span>
+		<span class="timestamp">
+			{{post.created|timesince}} ago
+		</span>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

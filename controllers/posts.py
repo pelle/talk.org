@@ -16,7 +16,7 @@ import views
 #from models import Conversation
 from models import Post
 from models import PostForm
-#from models import User
+from models import Profile
 
 def index(request):
   """Request / -- show all posts."""
@@ -30,6 +30,14 @@ def index(request):
                        {'posts': posts, 'form' : form})
   
 
+def increment_profile_post_count(profile, amount):
+  if profile.postCount is None:
+    postCount=amount
+  else:
+    profile.postCount += amount
+  profile.put()
+
+
 def create(request):
   """Create a post.  GET shows a blank form, POST processes it."""
   
@@ -39,20 +47,13 @@ def create(request):
     # See what we did in websites.py - this should happen here as well.
     login_url = users.create_login_url(request.get_full_path())
     return http.HttpResponseRedirect(login_url)
-  
-#  if website_id is None:
-#    return http.HttpResponseNotFound('No website exists with that key')
-    
-#  website = Website.get(db.Key.from_path(Website.kind(), int(website_id)))
-#  if website is None:
-#    return http.HttpResponseNotFound('No website exists with that key (%r)' %
-#                                     website_id)
     
   form = PostForm(data=request.POST or None)
 
   if not request.POST:
     return views.respond(request, user, 'posts/form', 
                          {'form': form})
+  
     
   errors = form.errors
   if not errors:
@@ -63,9 +64,18 @@ def create(request):
   if errors:
     return views.respond(request, user, 'posts/form', 
                          {'form': form})
-    
+  
+  profile=Profile.gql("where user=:1",user).get()
+  
+  if profile is None:
+    profile=Profile(user=user,nick=user.nickname())
+    profile.put()
   post.owner = user
+  post.author = profile
   post.put()
+  
+  db.run_in_transaction(increment_profile_post_count, profile,1)
+  
   memcache.delete("latest_posts")
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')

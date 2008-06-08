@@ -9,8 +9,8 @@ echo "MINIFIED CSS! (static/stylesheets/talk_compiled.css)";
 head static/stylesheets/talk_compiled.css;
 echo "-------------------------------"
 
-cat static/javascripts/jquery.blockUI.js \
-    static/javascripts/talk.js > /tmp/talk_compiled.js.tmp
+#cat static/javascripts/jquery.blockUI.js \
+cat  static/javascripts/talk.js > /tmp/talk_compiled.js.tmp
 java -jar tools/yuicompressor-2.3.4.jar \
      --type js /tmp/talk_compiled.js.tmp \
      -o static/javascripts/talk_compiled.js;

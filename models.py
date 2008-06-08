@@ -6,28 +6,30 @@ try:
 except ImportError:
   from django import forms
 
-class User(db.Model):
-  owner = db.UserProperty()
-  name = db.StringProperty(required=True)
-  url = db.LinkProperty(required=True)
+class Profile(db.Model):
+  user = db.UserProperty()
+  nick = db.StringProperty(required=True)
+  fullName = db.StringProperty()
+  url = db.LinkProperty()
+  postCount = db.IntegerProperty(default=0)
   description = db.StringProperty(multiline=True)
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)
-  
-class UserForm(djangoforms.ModelForm):
+      
+class ProfileForm(djangoforms.ModelForm):
   class Meta:
-    model = User
-    exclude = ['owner', 'created', 'modified']
+    model = Profile
+    exclude = ['nick','postCount','user', 'created', 'modified']
 
-class Conversation(db.Model):
-  owner = db.ReferenceProperty(User)
-  created = db.DateTimeProperty(auto_now_add=True)
-  modified = db.DateTimeProperty(auto_now_add=True)
+#class Conversation(db.Model):
+#  owner = db.ReferenceProperty(Profile,collection_name=conversations)
+#  created = db.DateTimeProperty(auto_now_add=True)
+#  modified = db.DateTimeProperty(auto_now_add=True)
       
 class Post(db.Model):
-  conversation = db.ReferenceProperty(Conversation)
+#  conversation = db.ReferenceProperty(Conversation,collection_name=posts)
   owner = db.UserProperty()
-#  author = db.ReferenceProperty(User)
+  author = db.ReferenceProperty(Profile)
   body = db.StringProperty(required=True, multiline=False)
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)

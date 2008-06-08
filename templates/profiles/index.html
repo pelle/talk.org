@@ -1,0 +1,22 @@
+{% extends base_template %}
+{% block body %}
+
+<div id="users">
+	<h1>Most Active Users</h1>
+	{% for profile in profiles %}
+	<div class="profile">
+		<span class="post_count">
+			 {{profile.postCount}} posts
+		</span>
+		<span class="author">
+			<a href="{%url controllers.profiles.show profile.key%}">
+			{{profile.nick}}
+			</a>
+		</span>
+		<span class="timestamp">
+			{{profile.created|timesince}} ago
+		</span>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
