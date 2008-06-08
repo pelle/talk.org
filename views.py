@@ -23,6 +23,7 @@ from django import shortcuts
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.template import loader, Context
+
 from models import Profile
 
 def respond(request, user, template, params=None):

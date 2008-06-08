@@ -59,7 +59,6 @@ except ImportError:
 
 # Import the part of Django that we use here.
 import django.core.handlers.wsgi
-
 def main():
   # Create a Django application for WSGI.
   application = django.core.handlers.wsgi.WSGIHandler()

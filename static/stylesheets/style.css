@@ -213,6 +213,9 @@ ul.tabs { display: block; }
 #posts .post a {
   color: #DD0;
 }
+#posts .post a.profile {
+  color: #FF0;
+}
 
 #posts .post .author {
   color:#8FB;

@@ -92,6 +92,7 @@ INSTALLED_APPS = (
   'django.contrib.contenttypes',
   'django.contrib.sessions',
   'appengine_django',
+  'my_filters',
 )
 
 SESSION_ENGINE = 'gae_sessions' 
