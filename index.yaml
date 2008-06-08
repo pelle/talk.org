@@ -28,8 +28,3 @@ indexes:
   - name: postCount
     direction: desc
 
-# Used once in query history.
-- kind: Profile
-  properties:
-  - name: post_count
-    direction: desc

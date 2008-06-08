@@ -28,6 +28,9 @@ def show(request, nick):
   nick=unquote(nick)
   logging.info('Got key, %s' % nick)
   profile = Profile.ForNick(nick)
+  if not profile:
+    logging.warn('Nickname missing: %s' % nick)
+    return http.HttpResponseRedirect("/profiles")
   logging.info('Got profile, %s' % profile.nick)
   posts=profile.post_set;
   return views.respond(request, user, 'profiles/show',
