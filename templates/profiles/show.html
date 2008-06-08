@@ -1,4 +1,5 @@
 {% extends base_template %}
+{% load talk_filters %}
 {% block body %}
 <div class="user" id="users">
 <h1>{{profile.nick}}</h1>
@@ -19,7 +20,7 @@
 	<h3>{{profile.postCount}} posts</h3>
 	{% for post in posts %}
 	<div class="post">
-		{{post.body|urlize}}
+		{{post.body|urlize|atify}}
 		<span class="author">
 			{{post.author.nick}}
 		</span>
