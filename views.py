@@ -53,7 +53,7 @@ def respond(request, user, template, params=None):
     params['is_admin'] = (users.IsCurrentUserAdmin() and
                           'Dev' in os.getenv('SERVER_SOFTWARE'))
                           
-    params['current_profile']=Profile.gql("where user=:1",user).get()
+    params['current_profile']=Profile.For(user)
   else:
     params['sign_in'] = users.CreateLoginURL(request.path)
     

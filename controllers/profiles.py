@@ -23,11 +23,11 @@ def index(request):
   return views.respond(request, user, 'profiles/index',
                        {'profiles': profiles})
 
-def show(request, key):
+def show(request, nick):
   user = users.GetCurrentUser()
-  logging.info('Got key, %s' % key)
-  key=db.Key(unquote(key))
-  profile = Profile.get(key)
+  nick=unquote(nick)
+  logging.info('Got key, %s' % nick)
+  profile = Profile.ForNick(nick)
   logging.info('Got profile, %s' % profile.nick)
   posts=profile.post_set;
   return views.respond(request, user, 'profiles/show',

@@ -6,8 +6,10 @@ try:
 except ImportError:
   from django import forms
 
-class Profile(db.Model):
-  user = db.UserProperty()
+import logging
+
+class Profile(db.Expando):
+  user = db.UserProperty(required=True)
   nick = db.StringProperty(required=True)
   fullName = db.StringProperty()
   url = db.LinkProperty()
@@ -15,6 +17,60 @@ class Profile(db.Model):
   description = db.StringProperty(multiline=True)
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)
+  
+  def increase_count(self,amount=None):
+    if amount is None:
+      amount=1
+    
+    def increment_profile_post_count(amount):
+      if self.postCount is None:
+        postCount=amount
+      else:
+        self.postCount += amount
+      self.put()
+    return db.run_in_transaction(increment_profile_post_count,amount)
+  
+  @staticmethod
+  def ForNick(nick):
+    logging.info("Loading Profile: %s" % nick)
+    return Profile.get_by_key_name(nick)
+      
+
+  @staticmethod
+  def For(user=None):
+    """Gets user-data in a specific category (such as "settings")
+       from the database. If no user-specific data exists yet, a new
+       unique entry will be created.
+    """
+
+    # If no user is given, get the user that is currently logged in.
+    # If nobody is logged in, return None
+    if not user:
+      user = users.GetCurrentUser()
+    if not user:
+      return None
+
+    # In most cases, we can just do a lookup by nick_name
+    profile = Profile.ForNick(user.nickname())
+    if profile and profile.user==user:
+      return profile
+    
+    # That didn't work -- let's do a gql query, just in case the user's
+    # nickname changed but we can find it by object
+    by_user_profile = Profile.gql('WHERE user=:1',user).get()
+    if by_user_profile:
+      return by_user_profile
+
+    # Ok, so there is nothing in the database yet. We assume that we can
+    # create a new entry, using the key from above. In theory, there is a
+    # slim chance of creating a duplicate object (if the user's email
+    # address changes the very second we create that entry and a
+    # parallel request creates a new entry with the same user), but that's
+    # a chance we are willing to take.
+    data = Profile.get_or_insert("Profile:%s" % user.nickname(),
+        user=user,nick=user.nickname())
+    return data
+  
       
 class ProfileForm(djangoforms.ModelForm):
   class Meta:
@@ -39,3 +95,61 @@ class PostForm(djangoforms.ModelForm):
   class Meta:
     model = Post
     exclude = ['conversation', 'author','owner', 'created', 'modified']
+
+    from google.appengine.api import users
+    from google.appengine.ext import db
+
+
+"""Persistence of user-specific data."""
+
+
+class UserData(db.Expando):
+ """An Expando-Model that can store an arbitrary set of data entries
+    for a given user. The only two required parameters are the
+    user object and a categorization of the data being stored
+    (such as "settings"). This class uses the primary key to create
+    a uniqueness-constraint within a user and a category, so it is
+    required that one uses the Load or Modify methods defined in
+    this class to persist new models. Afterwards, the normal rules
+    (using put(), run_in_transaction() and so on apply)
+ """
+ user = db.UserProperty(required=True)
+ category = db.StringProperty(required=True)
+
+ @staticmethod
+ def Load(category='None', user=None):
+   """Gets user-data in a specific category (such as "settings")
+      from the database. If no user-specific data exists yet, a new
+      unique entry will be created.
+   """
+
+   # If no user is given, get the user that is currently logged in.
+   # If nobody is logged in, return None
+   if not user:
+     user = users.GetCurrentUser()
+   if not user:
+     return None
+
+   # In most cases, we can just do a lookup by key
+   key_name = '%s||%s' % (user.email(), category)
+   data = UserData.get_by_key_name(key_name)
+   if data:
+     return data
+
+   # That didn't work -- let's do a gql query, just in case the user's
+   # email address changed but we can find it by object
+   data = UserData.gql('WHERE user=:1 AND category=:2',
+       user, category).get()
+   if data:
+     return data
+
+   # Ok, so there is nothing in the database yet. We assume that we can
+   # create a new entry, using the key from above. In theory, there is a
+   # slim chance of creating a duplicate object (if the user's email
+   # address changes the very second we create that entry and a
+   # parallel request creates a new entry with the same user), but that's
+   # a chance we are willing to take.
+   data = UserData.get_or_insert(key_name,
+       user=user, category=category)
+   return data
+       

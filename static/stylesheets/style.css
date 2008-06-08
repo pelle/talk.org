@@ -195,11 +195,12 @@ ul.tabs { display: block; }
 #posts form input[type=text] {
   border:none;
   padding: 1em;
-  width:600px;
+  width:700px;
 	-moz-border-radius: 1em;
-	-webkit-border-radius: 1em;	
+	-webkit-border-radius: 1em;
+	color: white;
+  background: #062;
 }
-
 #posts .post {
   margin-bottom: 1em;
   padding: 1em;

@@ -30,13 +30,6 @@ def index(request):
                        {'posts': posts, 'form' : form})
   
 
-def increment_profile_post_count(profile, amount):
-  if profile.postCount is None:
-    postCount=amount
-  else:
-    profile.postCount += amount
-  profile.put()
-
 
 def create(request):
   """Create a post.  GET shows a blank form, POST processes it."""
@@ -68,13 +61,11 @@ def create(request):
   profile=Profile.gql("where user=:1",user).get()
   
   if profile is None:
-    profile=Profile(user=user,nick=user.nickname())
-    profile.put()
+    profile=Profile.For(user)
   post.owner = user
   post.author = profile
   post.put()
-  
-  db.run_in_transaction(increment_profile_post_count, profile,1)
+  profile.increase_count()
   
   memcache.delete("latest_posts")
   logging.info('Saved the post, %s' % post)

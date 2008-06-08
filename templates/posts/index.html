@@ -6,8 +6,6 @@
 	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
 		<p>If you've got something to say, say it...</p>
 	  {{form.as_p}}
-
-
 	</form>
 	{% else %}
 	<p>
@@ -19,7 +17,7 @@
 		{{post.body|urlize}}
 		<span class="author">
 			{%if post.author%}
-				<a href="{%url controllers.profiles.show post.author.key%}">
+				<a href="{%url controllers.profiles.show post.author.nick%}">
 				{{post.author.nick}}
 				</a>
 			{%else%}
