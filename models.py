@@ -8,7 +8,7 @@ except ImportError:
 
 import logging
 
-class Profile(db.Expando):
+class Profile(db.Model):
   user = db.UserProperty(required=True)
   nick = db.StringProperty(required=True)
   fullName = db.StringProperty()
@@ -30,6 +30,11 @@ class Profile(db.Expando):
       self.put()
     return db.run_in_transaction(increment_profile_post_count,amount)
   
+  def name(self):
+    if self.fullName:
+      return self.fullName;
+    return self.nick;
+    
   @staticmethod
   def ForNick(nick):
     logging.info("Loading Profile: %s" % nick)

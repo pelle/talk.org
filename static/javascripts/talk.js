@@ -13,4 +13,9 @@ $(document).ready(function() {
       return false;
     };
   });
+  if($(".auto_reload #post_list").size()==1){
+    setInterval(function(e){
+      $("#post_list").load("/?output=ajax");
+    },30000);
+  };
 });

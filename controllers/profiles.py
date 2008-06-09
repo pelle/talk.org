@@ -2,6 +2,7 @@ import os
 import logging
 from urllib import unquote
 from google.appengine.api import users
+from google.appengine.api import datastore_errors
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
@@ -42,13 +43,17 @@ def show(request, nick):
     post=None
   form = PostForm(post)
 
-  posts = memcache.get("posts_from_%s"%nick)
-  if posts is None:
-    posts=profile.post_set
-    posts.order("-created")
-    posts=posts.fetch(20)
-    logging.info("setting memcache posts_from_%s"%nick)
-    memcache.set("posts_from_%s"%nick,posts)
+#  try:
+#    posts = memcache.get("posts_from_%s"%nick)
+#  except:
+#    logging.error("Error loading cache from 'posts_from_%s'"%nick)
+#    memcache.delete("posts_from_%s"%nick)
+#    posts=None
+#
+#  if not posts:
+  posts=profile.post_set.order("-created").fetch(20)
+#  logging.info("setting memcache posts_from_%s"%nick)
+#  memcache.set("posts_from_%s"%nick,posts)
   
   return views.respond(request, user, 'profiles/show',
                        {'posts': posts, 'profile' : profile,'form':form})

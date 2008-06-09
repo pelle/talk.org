@@ -1,8 +1,10 @@
 {% extends base_template %}
 {% load talk_filters %}
+{%block title%}Talk.org: {{profile.name}} {%endblock%}
+
 {% block body %}
 <div class="user" id="users">
-<h1>{{profile.nick}}</h1>
+<h1>{{profile.name}}</h1>
 {%ifequal profile.user user%}
 <a href="{%url controllers.profiles.edit%}">Edit</a>
 {%endifequal%}
@@ -26,21 +28,6 @@
 	
 	
 	<h3>{{profile.postCount}} posts</h3>
-	{% for post in posts %}
-	<div class="post">
-		{{post.body|urlize|atify}}
-		<span class="author">
-			{{post.author.nick}}
-		</span>
-		<span class="timestamp">
-			{{post.created|timesince}} ago
-		</span>
-		{%ifequal user post.author.user%}
-		<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
-		<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
-		{%endifequal%}
-		
-	</div>
-	{% endfor %}
+	{% include "posts/_post_list.html" %}
 </div>
 {% endblock %}

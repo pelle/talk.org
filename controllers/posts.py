@@ -4,6 +4,7 @@ from urllib import unquote
 
 from google.appengine.api import users
 from google.appengine.api import memcache
+from google.appengine.api import datastore_errors
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
@@ -22,12 +23,22 @@ from models import Profile
 def index(request):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-  posts = memcache.get("latest_posts")
-  if posts is None:
-    posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20").fetch(20)
-    logging.info("setting memcache latest_posts")
-    memcache.set("latest_posts",posts)
+#  try:
+#    posts = memcache.get("latest_posts")
+#  except:
+#    logging.error("Error happened when loading 'latest_posts' from cache")
+#    memcache.delete("latest_posts")
+#    posts=None
+#   
+#  if not posts :
+  posts = Post.gql("ORDER BY created DESC LIMIT 20").fetch(20)
+#    logging.info("setting memcache latest_posts")
+#    memcache.set("latest_posts",posts)
+
   form = PostForm(None)
+  if request.has_key('output') and request['output']=='ajax':
+    return views.respond(request, user, 'posts/_post_list',
+                         {'posts': posts})
   return views.respond(request, user, 'posts/index',
                        {'posts': posts, 'form' : form})
   

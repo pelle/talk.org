@@ -1,8 +1,6 @@
 {% extends base_template %}
-{% load talk_filters %}
 {% block body %}
-
-<div id="posts">
+<div id="posts" class="auto_reload">
 	{%if user %}
 	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
 		<p>If you've got something to say, say it...</p>
@@ -13,26 +11,6 @@
 		No need to register just <a href="{{sign_in}}">Sign in</a> using your Google Account to post.
 	</p>
 	{%endif%}
-	{% for post in posts %}
-	<div class="post">
-		{{post.body|urlize|atify}}
-		<span class="author">
-			{%if post.author%}
-				<a href="{%url controllers.profiles.show post.author.nick%}">
-				{{post.author.nick}}
-				</a>
-			{%else%}
-				{{post.owner}}
-			{%endif%}
-		</span>
-		<a href="{%url controllers.posts.show post.key%}" class="timestamp">
-			{{post.created|timesince}} ago
-		</a>
-		{%ifequal user post.author.user%}
-		<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
-		<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
-		{%endifequal%}
-	</div>
-	{% endfor %}
+	{% include "posts/_post_list.html" %}
 </div>
 {% endblock %}

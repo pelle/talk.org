@@ -1,26 +1,7 @@
 {% extends base_template %}
-{% load talk_filters %}
+{%block title%}Talk.org: Post by {{post.author.name}} {%endblock%}
 {% block body %}
-
 <div id="posts">
-	<div class="post">
-		{{post.body|urlize|atify}}
-		<span class="author">
-			{%if post.author%}
-				<a href="{%url controllers.profiles.show post.author.nick%}">
-				{{post.author.nick}}
-				</a>
-			{%else%}
-				{{post.owner}}
-			{%endif%}
-		</span>
-		<span class="timestamp">
-			{{post.created|timesince}} ago
-		</span>
-		{%ifequal user post.author.user%}
-		<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
-		<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
-		{%endifequal%}
-	</div>
+{%include "posts/_post.html"%}
 </div>
 {% endblock %}
