@@ -18,7 +18,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns(
   '',
   (r'^$', 'controllers.posts.index'),
- # (r'^pages/(.*)$', 'views.static'),
+  (r'^posts/(.*)$', 'controllers.posts.show'),
   (r'^create$', 'controllers.posts.create'),
 #  (r'^conversation/(.*)$', 'controllers.conversations.show'),
   (r'^archives/(.*)$', 'controllers.neubia.redirect'),

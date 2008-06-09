@@ -25,9 +25,9 @@
 				{{post.owner}}
 			{%endif%}
 		</span>
-		<span class="timestamp">
+		<a href="{%url controllers.posts.show post.key%}" class="timestamp">
 			{{post.created|timesince}} ago
-		</span>
+		</a>
 	</div>
 	{% endfor %}
 </div>

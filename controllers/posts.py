@@ -1,5 +1,6 @@
 import os
 import logging
+from urllib import unquote
 
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -24,6 +25,8 @@ def index(request):
   posts = memcache.get("latest_posts")
   if posts is None:
     posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20")
+    logging.info("setting memcache latest_posts")
+    memcache.set("latest_posts",posts)
 #  websites = db.GqlQuery("SELECT * FROM Website ORDER BY created DESC LIMIT 5")
   form = PostForm(None)
   return views.respond(request, user, 'posts/index',
@@ -68,8 +71,17 @@ def create(request):
   profile.increase_count()
   
   memcache.delete("latest_posts")
+  memcache.delete("posts_from_%s"%profile.nick)
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')
+
+def show(request,key):
+  """Request / -- show all posts."""
+  user = users.GetCurrentUser()
+  post=Post.get(db.Key(unquote(key)))
+  return views.respond(request, user, 'posts/show',
+                       {'post': post})
+
 
 
 def edit(request, greeting_id):

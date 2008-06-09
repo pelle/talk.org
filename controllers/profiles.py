@@ -5,6 +5,7 @@ from google.appengine.api import users
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
+from google.appengine.api import memcache
 
 import django
 from django import http
@@ -32,7 +33,14 @@ def show(request, nick):
     logging.warn('Nickname missing: %s' % nick)
     return http.HttpResponseRedirect("/profiles")
   logging.info('Got profile, %s' % profile.nick)
-  posts=profile.post_set;
+  posts = memcache.get("posts_from_%s"%nick)
+  if posts is None:
+    posts=profile.post_set
+    posts.order("-created")
+    posts=posts.fetch(20)
+    logging.info("setting memcache posts_from_%s"%nick)
+    memcache.set("posts_from_%s"%nick,posts)
+  
   return views.respond(request, user, 'profiles/show',
                        {'posts': posts, 'profile' : profile})
                        

@@ -1,0 +1,22 @@
+{% extends base_template %}
+{% load talk_filters %}
+{% block body %}
+
+<div id="posts">
+	<div class="post">
+		{{post.body|urlize|atify}}
+		<span class="author">
+			{%if post.author%}
+				<a href="{%url controllers.profiles.show post.author.nick%}">
+				{{post.author.nick}}
+				</a>
+			{%else%}
+				{{post.owner}}
+			{%endif%}
+		</span>
+		<span class="timestamp">
+			{{post.created|timesince}} ago
+		</span>
+	</div>
+</div>
+{% endblock %}
