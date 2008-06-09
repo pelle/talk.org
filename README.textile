@@ -2,9 +2,9 @@ h1. Talk.org source code
 
 This is a Twitter like application written in Python/Django for Google's AppEngine.
 
-The live running version of this is on http://talk.org
+The live running version of this is on "Talk.org":http://talk.org
 
-Here is "The original Announcement for Talk.org is at":http://stakeventures.com/articles/2008/06/09/just-in-time-for-the-keynote-my-new-google-app-engine-twitter-clone-talk-org
+Here is "The original Announcement for Talk.org":http://stakeventures.com/articles/2008/06/09/just-in-time-for-the-keynote-my-new-google-app-engine-twitter-clone-talk-org
 
 I'll happily accept patches, suggestions etc.
 
@@ -13,7 +13,7 @@ I'm releasing my code under GPL v3 as this is the best license IMHO for Web Appl
 Of course this code builds on Django, Google and other libraries. In particular I used
 "Wuzhere":http://code.google.com/p/wuzhere/ as the base for application structure etc.
 
-Talk.org - A Twitter like Application
+<pre>Talk.org - A Twitter like Application
 Copyright (C) 2008 Pelle Braendgaard
 
 This program is free software: you can redistribute it and/or modify
@@ -28,3 +28,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+</pre>
