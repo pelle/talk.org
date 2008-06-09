@@ -4,10 +4,9 @@ This is a Twitter like application written in Python/Django for Google's AppEngi
 
 The live running version of this is on http://talk.org
 
-The original Announcement for Talk.org is at:
-http://stakeventures.com/articles/2008/06/09/just-in-time-for-the-keynote-my-new-google-app-engine-twitter-clone-talk-org
+Here is "The original Announcement for Talk.org is at":http://stakeventures.com/articles/2008/06/09/just-in-time-for-the-keynote-my-new-google-app-engine-twitter-clone-talk-org
 
-I'll happily accept patches etc.
+I'll happily accept patches, suggestions etc.
 
 I'm releasing my code under GPL v3 as this is the best license IMHO for Web Applications.
 
