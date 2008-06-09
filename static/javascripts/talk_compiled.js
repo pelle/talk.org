@@ -1,1 +1,1 @@
-$(document).ready(function(){$("input:visible:enabled:first").focus();$("#posts form").submit(function(B){var A=$("#id_body");var C=A.val();if(C&&C!=""){A.hide();return true}else{return false}})});
+$(document).ready(function(){$("input:visible:enabled:first").focus();$("a.destroy").click(function(A){return confirm("Are you sure?")});$("#posts form").submit(function(B){var A=$("#id_body");var C=A.val();if(C&&C!=""){A.hide();return true}else{return false}})});

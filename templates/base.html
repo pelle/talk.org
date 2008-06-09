@@ -23,9 +23,9 @@
 						{%endif%}
 	
 	
-						&lt;{{user.email}}&gt;</strong></li>
+						 ({{user.email}})</strong></li>
           {%if is_admin%} <li> <a href="/_ah/admin">Admin</a></li>{%endif%}
-					<li><a href="{%url controllers.profiles.index%}">Latest Users</a></li>					
+					<li><a href="{%url controllers.profiles.index%}">Most Active Users</a></li>					
           {%if sign_out%} <li><a href="{{sign_out}}">Sign out</a></li>{%endif%}
 					
           {% else %}

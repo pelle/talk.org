@@ -22,12 +22,11 @@ from models import Profile
 def index(request):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-  posts = memcache.get("latest_posts")
-  if posts is None:
-    posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20")
-    logging.info("setting memcache latest_posts")
-    memcache.set("latest_posts",posts)
-#  websites = db.GqlQuery("SELECT * FROM Website ORDER BY created DESC LIMIT 5")
+#  posts = memcache.get("latest_posts")
+#  if posts is None:
+  posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20").fetch(20)
+#  logging.info("setting memcache latest_posts")
+#    memcache.set("latest_posts",posts)
   form = PostForm(None)
   return views.respond(request, user, 'posts/index',
                        {'posts': posts, 'form' : form})
@@ -70,47 +69,71 @@ def create(request):
   post.put()
   profile.increase_count()
   
-  memcache.delete("latest_posts")
-  memcache.delete("posts_from_%s"%profile.nick)
+#  memcache.delete("latest_posts")
+#  memcache.delete("posts_from_%s"%profile.nick)
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')
 
 def show(request,key):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-  post=Post.get(db.Key(unquote(key)))
-  return views.respond(request, user, 'posts/show',
+  try:
+    post=Post.get(db.Key(unquote(key)))
+    if post is None:
+      return http.HttpResponseNotFound("No Post exists with that key")
+    return views.respond(request, user, 'posts/show',
                        {'post': post})
+  except(db.BadKeyError):
+    return http.HttpResponseNotFound("No Post exists with that key")
+    
 
 
 
-def edit(request, greeting_id):
+def edit(request, key):
   """Create or edit a gift.  GET shows a blank form, POST processes it."""
   user = users.GetCurrentUser()
   if user is None:
-    return http.HttpResponseForbidden('You must be signed in to add or edit a greeting')
+    return http.HttpResponseForbidden('You must be signed in to add or edit a post')
 
-  greeting = None
-  if greeting_id:
-    greeting = models.posts.Greeting.get(db.Key.from_path(Greeting.kind(), int(greeting_id)))
-    if greeting is None:
-      return http.HttpResponseNotFound('No greeting exists with that key (%r)' %
-                                       greeting_id)
-
-  form = models.GreetingForm(data=request.POST or None, instance=greeting)
+  post = None
+  if key:
+    post=Post.get(db.Key(unquote(key)))
+    if post is None:
+      return http.HttpResponseNotFound("No Post exists with that key")
+    if post.author.user!=user:
+      return http.HttpResponseForbidden('You can only edit your own posts')
+  form = PostForm(data=request.POST or None, instance=post)
 
   if not request.POST:
-    return views.respond(request, user, 'greeting', {'form': form, 'greeting': greeting})
+    return views.respond(request, user, 'posts/edit', {'form': form, 'post': post})
 
   errors = form.errors
   if not errors:
     try:
-      greeting = form.save(commit=False)
+      post = form.save(commit=False)
     except ValueError, err:
       errors['__all__'] = unicode(err)
   if errors:
-    return views.respond(request, user, 'greeting', {'form': form, 'greeting': greeting})
+    return views.respond(request, user, 'posts/edit', {'form': form, 'post': post})
 
-  greeting.put()
+  post.put()
 
+  return http.HttpResponseRedirect('/')
+
+def destroy(request, key):
+  user = users.GetCurrentUser()
+  if user is None:
+    return http.HttpResponseForbidden('You must be signed in to add or edit a post')
+
+  post = None
+  if key:
+    post=Post.get(db.Key(unquote(key)))
+    if post is None:
+      return http.HttpResponseNotFound("No Post exists with that key")
+    if post.author.user!=user:
+      return http.HttpResponseForbidden('You can only delete your own posts')
+
+  post.delete()
+  profile=Profile.For(user)
+  profile.increase_count(-1)
   return http.HttpResponseRedirect('/')

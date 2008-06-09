@@ -70,9 +70,13 @@ class Profile(db.Expando):
     # address changes the very second we create that entry and a
     # parallel request creates a new entry with the same user), but that's
     # a chance we are willing to take.
-    data = Profile.get_or_insert("Profile:%s" % user.nickname(),
-        user=user,nick=user.nickname())
-    return data
+    if profile:
+      nick="%s2"%user.nickname()
+    else:
+      nick=user.nickname()
+    profile = Profile(key_name="Profile:%s" % nick,user=user,nick=nick)
+    profile.put()
+    return profile
   
       
 class ProfileForm(djangoforms.ModelForm):
@@ -94,7 +98,7 @@ class Post(db.Model):
   modified = db.DateTimeProperty(auto_now_add=True)
   
 class PostForm(djangoforms.ModelForm):
-  body = forms.CharField(widget=forms.TextInput(attrs={'size':'60','maxlength':'140','label':'Talk'} ))
+  body = forms.CharField(widget=forms.TextInput(attrs={'size':'60','maxlength':'140'} ))
   class Meta:
     model = Post
     exclude = ['conversation', 'author','owner', 'created', 'modified']

@@ -17,6 +17,10 @@
 		<span class="timestamp">
 			{{post.created|timesince}} ago
 		</span>
+		{%ifequal user post.author.user%}
+		<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
+		<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
+		{%endifequal%}
 	</div>
 </div>
 {% endblock %}

@@ -14,6 +14,7 @@ from django import shortcuts
 import views
 
 from models import Post
+from models import PostForm
 from models import Profile
 from models import ProfileForm
 
@@ -33,16 +34,24 @@ def show(request, nick):
     logging.warn('Nickname missing: %s' % nick)
     return http.HttpResponseRedirect("/profiles")
   logging.info('Got profile, %s' % profile.nick)
-  posts = memcache.get("posts_from_%s"%nick)
-  if posts is None:
-    posts=profile.post_set
-    posts.order("-created")
-    posts=posts.fetch(20)
-    logging.info("setting memcache posts_from_%s"%nick)
-    memcache.set("posts_from_%s"%nick,posts)
+  
+  post={}
+  if profile.user!=user:
+    post["body"]="@%s "%profile.nick
+  else:
+    post=None
+  form = PostForm(post)
+
+#  posts = memcache.get("posts_from_%s"%nick)
+#  if posts is None:
+  posts=profile.post_set
+  posts.order("-created")
+  posts=posts.fetch(20)
+#    logging.info("setting memcache posts_from_%s"%nick)
+#    memcache.set("posts_from_%s"%nick,posts)
   
   return views.respond(request, user, 'profiles/show',
-                       {'posts': posts, 'profile' : profile})
+                       {'posts': posts, 'profile' : profile,'form':form})
                        
 def edit(request):
   user=users.GetCurrentUser()

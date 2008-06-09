@@ -1,0 +1,14 @@
+{% extends base_template %}
+{% block body %}
+<div id="posts">
+<form action="{%url controllers.posts.edit post.key %}" method="post"  class="vform">
+  
+  {{form.as_p}}
+  
+  <div>
+    <input type="submit" value="Save" />
+  </div>
+
+</form>
+</div>
+{% endblock %}

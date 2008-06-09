@@ -227,6 +227,10 @@ ul.tabs { display: block; }
 #posts .post .timestamp {
   color:#4B8;
 }
+#posts .post a.action {
+  color:#8FB;
+  font-size:0.6em;
+}
 /* Hack to remove label */
 #posts form.vform p label[for=id_body] {
   display:none;

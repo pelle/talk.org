@@ -17,6 +17,14 @@
 {%endif%}
 </div>
 <div id="posts">
+	{%if user %}
+	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
+		<p>If you've got something to say{%ifnotequal user profile.user%} to {{profile.nick}}{%endifnotequal%}, say it...</p>
+	  {{form.as_p}}
+	</form>
+	{%endif%}
+	
+	
 	<h3>{{profile.postCount}} posts</h3>
 	{% for post in posts %}
 	<div class="post">
@@ -27,6 +35,11 @@
 		<span class="timestamp">
 			{{post.created|timesince}} ago
 		</span>
+		{%ifequal user post.author.user%}
+		<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
+		<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
+		{%endifequal%}
+		
 	</div>
 	{% endfor %}
 </div>
