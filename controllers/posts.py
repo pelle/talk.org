@@ -22,11 +22,11 @@ from models import Profile
 def index(request):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-#  posts = memcache.get("latest_posts")
-#  if posts is None:
-  posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20").fetch(20)
-#  logging.info("setting memcache latest_posts")
-#    memcache.set("latest_posts",posts)
+  posts = memcache.get("latest_posts")
+  if posts is None:
+    posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 20").fetch(20)
+    logging.info("setting memcache latest_posts")
+    memcache.set("latest_posts",posts)
   form = PostForm(None)
   return views.respond(request, user, 'posts/index',
                        {'posts': posts, 'form' : form})
@@ -69,8 +69,8 @@ def create(request):
   post.put()
   profile.increase_count()
   
-#  memcache.delete("latest_posts")
-#  memcache.delete("posts_from_%s"%profile.nick)
+  memcache.delete("latest_posts")
+  memcache.delete("posts_from_%s"%profile.nick)
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')
 

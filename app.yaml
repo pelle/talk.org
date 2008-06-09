@@ -19,10 +19,14 @@ handlers:
   static_files: static/\1/\2
   upload: static/(javascripts|stylesheets|images)/(.*\.(js|css|png|gif|jpg))
 
-# Default static content url catches those w/o versions in their names.
+# Top level icons
 - url: /favicon.ico
   static_files: static/favicon.ico
   upload: static/favicon.ico
+
+- url: /apple-touch-icon.png
+  static_files: static/apple-touch-icon.png
+  upload: static/apple-touch-icon.png
 
 # Pass everything else to the django bootstrapper.
 - url: /.*

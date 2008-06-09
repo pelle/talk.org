@@ -23,18 +23,20 @@ a { outline: none; }
 
 /* Base Layout */
 #page {
-	margin-left:150px;
+	margin:0 auto;
 	padding: 1em;
 	width:800px;
+	position: relative;
 	background: white;
 }
 #logo {
   position:absolute;
-  top:3.5em;
-  left:850px;
+  top: 1.5em;
+  right:0;
 }
 #header {
   margin-bottom:1em;
+  font-size: 1.2em;
 }
 
 

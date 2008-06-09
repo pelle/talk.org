@@ -42,13 +42,13 @@ def show(request, nick):
     post=None
   form = PostForm(post)
 
-#  posts = memcache.get("posts_from_%s"%nick)
-#  if posts is None:
-  posts=profile.post_set
-  posts.order("-created")
-  posts=posts.fetch(20)
-#    logging.info("setting memcache posts_from_%s"%nick)
-#    memcache.set("posts_from_%s"%nick,posts)
+  posts = memcache.get("posts_from_%s"%nick)
+  if posts is None:
+    posts=profile.post_set
+    posts.order("-created")
+    posts=posts.fetch(20)
+    logging.info("setting memcache posts_from_%s"%nick)
+    memcache.set("posts_from_%s"%nick,posts)
   
   return views.respond(request, user, 'profiles/show',
                        {'posts': posts, 'profile' : profile,'form':form})
