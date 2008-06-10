@@ -18,7 +18,7 @@
 			    {%if user %}
           <li><strong>
 						{%if current_profile%}
-							<a href="{%url controllers.profiles.show current_profile.key%}">{{current_profile.nick}}</a>
+							<a href="{%url controllers.profiles.show current_profile.nick%}">{{current_profile.nick}}</a>
 						{%else%}
 							{{user.nickname}} 
 						{%endif%}

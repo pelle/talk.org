@@ -114,12 +114,12 @@ class Post(db.Model):
 #  conversation = db.ReferenceProperty(Conversation,collection_name=posts)
   owner = db.UserProperty()
   author = db.ReferenceProperty(Profile)
-  body = db.StringProperty(required=True, multiline=False)
+  body = db.StringProperty(required=True, multiline=True)
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)
   
 class PostForm(djangoforms.ModelForm):
-  body = forms.CharField(widget=forms.TextInput(attrs={'size':'60','maxlength':'140'} ))
+  body = forms.CharField(widget=forms.Textarea(attrs={'cols':'50','rows':'3'} ))
   class Meta:
     model = Post
     exclude = ['conversation', 'author','owner', 'created', 'modified']

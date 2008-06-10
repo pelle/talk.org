@@ -190,11 +190,8 @@ ul.tabs { display: block; }
 	-webkit-border-radius: 1em;	
 	-webkit-box-shadow: 0.1em 0em 0.3em #888;
 }
-#posts form input {
+#posts form input[type=text], #posts form textarea {
   font-size: 1em;
-  padding: 1em;
-}
-#posts form input[type=text] {
   border:none;
   padding: 1em;
   width:700px;
@@ -202,6 +199,22 @@ ul.tabs { display: block; }
 	-webkit-border-radius: 1em;
 	color: white;
   background: #062;
+}
+#posts form textarea{
+  overflow:hidden;
+}
+#posts form input[type=submit] {
+  font-size: 1em;
+  padding:0.5em;
+  border:none;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+  background:#8FB;
+  font-weight:bold;
+}
+#posts form input[type=submit]:hover {
+  background: #062;
+  color: white;
 }
 #posts .post {
   margin-bottom: 1em;
@@ -257,3 +270,8 @@ ul.tabs { display: block; }
   color:#48B;
 }
 
+.counter {
+  font-size: 0.8em;
+  color:#8FB;
+  float:right;
+}

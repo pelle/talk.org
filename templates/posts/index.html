@@ -5,6 +5,11 @@
 	<form action="{%url controllers.posts.create %}" method="post"  class="vform">
 		<p>If you've got something to say, say it...</p>
 	  {{form.as_p}}
+		<div>
+			<div class="counter"> <span id="character_count">0</span> characters</div>
+	    <input type="submit" value="Post" />
+			<br clear="both"/>
+	  </div>
 	</form>
 	{% else %}
 	<p>

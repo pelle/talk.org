@@ -10,14 +10,14 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 30 times in query history.
+# Used 31 times in query history.
 - kind: Post
   properties:
   - name: author
   - name: created
     direction: desc
 
-# Used 397 times in query history.
+# Used 437 times in query history.
 - kind: Post
   properties:
   - name: created
@@ -29,7 +29,7 @@ indexes:
   - name: created
     direction: desc
 
-# Used 18 times in query history.
+# Used 19 times in query history.
 - kind: Profile
   properties:
   - name: postCount
