@@ -4,7 +4,8 @@
 <form action="{%url controllers.posts.create %}" method="post"  class="vform">
   
   {{form.as_p}}
-  
+  <div class="counter"> <span id="character_count">0</span> characters</div>
+	
   <div>
     <input type="submit" value="Post" />
   </div>
