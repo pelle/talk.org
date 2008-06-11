@@ -60,17 +60,7 @@ def show(request, nick):
     post=None
   form = PostForm(post)
 
-#  try:
-#    posts = memcache.get("posts_from_%s"%nick)
-#  except:
-#    logging.error("Error loading cache from 'posts_from_%s'"%nick)
-#    memcache.delete("posts_from_%s"%nick)
-#    posts=None
-#
-#  if not posts:
-  posts=profile.post_set.order("-created").fetch(20)
-#  logging.info("setting memcache posts_from_%s"%nick)
-#  memcache.set("posts_from_%s"%nick,posts)
+  posts=profile.cachedPosts()
   
   return views.respond(request, user, 'profiles/show',
                        {'posts': posts, 'profile' : profile,'form':form})

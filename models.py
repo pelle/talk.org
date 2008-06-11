@@ -17,11 +17,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
+from google.appengine.api import memcache
 try:
   from django import newforms as forms
 except ImportError:
   from django import forms
+from django.utils.html import escape,urlize
+from my_filters.templatetags.talk_filters import atify
 
+from time import gmtime, strftime
 import logging
 
 class Profile(db.Model):
@@ -46,11 +50,41 @@ class Profile(db.Model):
       self.put()
     return db.run_in_transaction(increment_profile_post_count,amount)
   
+  def postHash(self,limit=20):
+    posts=self.post_set.order("-created").fetch(limit)
+    data=[]
+    for post in posts:
+      data.append(post.to_hash())
+    return data
+  
+  def posts_cache_name(self):
+    return ("posts_from_%s"%self.nick)
+  
+  def clear_post_cache(self):
+    logging.info("clearing memcache %s"%self.posts_cache_name())
+    memcache.delete(self.posts_cache_name())
+    
+  def cachedPosts(self):
+    try:
+      posts = memcache.get(self.posts_cache_name())
+    except:
+      logging.error("Error happened when loading '%s' from cache"%self.posts_cache_name())
+      self.clear_post_cache()
+      posts=None
+
+    if not posts :
+      posts = self.postHash()
+      logging.info("setting memcache %s"%self.posts_cache_name())
+      memcache.set(self.posts_cache_name(),posts)
+    else:
+      logging.info("loaded from memcache %s"%self.posts_cache_name())
+    return posts
+    
   def name(self):
     if self.fullName:
       return self.fullName;
     return self.nick;
-    
+
   @staticmethod
   def ForNick(nick):
     logging.info("Loading Profile: %s" % nick)
@@ -118,6 +152,37 @@ class Post(db.Model):
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)
   
+  def to_hash(self): #Date should be parsable by Javascript Date.parse("Thu, 01 Jan 1970 00:00:00 GMT");
+    return {'id':str(self.key()),'body':self.safe_body(),'created':self.created.strftime("%a, %d %b %Y %H:%M:%S %Z"),'author_nick':self.author.nick,'author_name':self.author.name()}
+  
+  def safe_body(self):
+    return urlize(atify(escape(self.body)))
+    
+  @staticmethod
+  def CachedGqlToHash(cache,query_string, *args, **kwds):
+    try:
+      posts = memcache.get("latest_posts")
+    except:
+      logging.error("Error happened when loading 'latest_posts' from cache")
+      memcache.delete("latest_posts")
+      posts=None
+
+    if not posts :
+      posts = Post.GqlToHash("ORDER BY created DESC LIMIT 20")
+      logging.info("setting memcache latest_posts")
+      memcache.set("latest_posts",posts)
+    else:
+      logging.info("loaded from memcache")
+    return posts
+
+  @staticmethod
+  def GqlToHash(query_string, *args, **kwds):
+    posts = Post.gql(query_string, *args, **kwds)
+    data=[]
+    for post in posts:
+      data.append(post.to_hash())
+    return data
+    
 class PostForm(djangoforms.ModelForm):
   body = forms.CharField(widget=forms.Textarea(attrs={'cols':'50','rows':'3'} ))
   class Meta:

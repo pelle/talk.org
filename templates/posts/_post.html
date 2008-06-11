@@ -1,18 +1,16 @@
 {% load talk_filters %}
 
 <div class="post">
+	{% autoescape off %}
 	{{post.body|urlize|atify}}
+	{% endautoescape%}
 	<span class="author">
-		{%if post.author%}
-			<a href="{%url controllers.profiles.show post.author.nick%}">
-			{{post.author.name}}
-			</a>
-		{%else%}
-			{{post.owner}}
-		{%endif%}
+		<a href="{%url controllers.profiles.show post.author_nick%}">
+		{{post.author_name}}
+		</a>
 	</span>
-	<a href="{%url controllers.posts.show post.key%}" class="timestamp">
-		{{post.created|timesince}} ago
+	<a href="{%url controllers.posts.show post.id%}" class="timestamp" title="{{post.created}}">
+		{{post.created}}
 	</a>
 	{%ifequal user post.author.user%}
 	<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>

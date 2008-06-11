@@ -25,6 +25,8 @@ from google.appengine.api import datastore_errors
 
 from google.appengine.ext import db
 from google.appengine.ext.db import djangoforms
+from django.utils import simplejson
+from django.http import HttpResponse
 
 import django
 from django import http
@@ -40,18 +42,8 @@ from models import Profile
 def index(request):
   """Request / -- show all posts."""
   user = users.GetCurrentUser()
-#  try:
-#    posts = memcache.get("latest_posts")
-#  except:
-#    logging.error("Error happened when loading 'latest_posts' from cache")
-#    memcache.delete("latest_posts")
-#    posts=None
-#   
-#  if not posts :
-  posts = Post.gql("ORDER BY created DESC LIMIT 20").fetch(20)
-#    logging.info("setting memcache latest_posts")
-#    memcache.set("latest_posts",posts)
-
+  posts = Post.CachedGqlToHash("latest_posts","ORDER BY created DESC LIMIT 20")
+  
   form = PostForm(None)
   if request.has_key('output') and request['output']=='ajax':
     return views.respond(request, user, 'posts/_post_list',
@@ -59,6 +51,10 @@ def index(request):
   return views.respond(request, user, 'posts/index',
                        {'posts': posts, 'form' : form})
   
+def raw(request,format):
+  """Request / -- show all posts."""
+  posts = Post.CachedGqlToHash("latest_posts","ORDER BY created DESC LIMIT 20")
+  return HttpResponse(simplejson.dumps(posts))#,"application/json")
 
 
 def create(request):
@@ -98,7 +94,8 @@ def create(request):
   profile.increase_count()
   
   memcache.delete("latest_posts")
-  memcache.delete("posts_from_%s"%profile.nick)
+  profile.clear_post_cache()
+  
   logging.info('Saved the post, %s' % post)
   return http.HttpResponseRedirect('/')
 
@@ -145,7 +142,8 @@ def edit(request, key):
     return views.respond(request, user, 'posts/edit', {'form': form, 'post': post})
 
   post.put()
-
+  memcache.delete("latest_posts")
+  post.author.clear_post_cache()
   return http.HttpResponseRedirect('/')
 
 def destroy(request, key):
