@@ -70,7 +70,7 @@ def create(request):
   form = PostForm(data=request.POST or None)
 
   if not request.POST:
-    return views.respond(request, user, 'posts/form', 
+    return views.respond(request, user, 'posts/create', 
                          {'form': form})
   
     
@@ -81,7 +81,7 @@ def create(request):
     except ValueError, err:
       errors['__all__'] = unicode(err)
   if errors:
-    return views.respond(request, user, 'posts/form', 
+    return views.respond(request, user, 'posts/create', 
                          {'form': form})
   
   profile=Profile.gql("where user=:1",user).get()

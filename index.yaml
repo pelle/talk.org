@@ -17,7 +17,7 @@ indexes:
   - name: created
     direction: desc
 
-# Used 7 times in query history.
+# Used 75 times in query history.
 - kind: Post
   properties:
   - name: created

@@ -1,6 +1,3 @@
-{% extends base_template %}
-{% block body %}
-<div id="posts">
 <form action="{%url controllers.posts.create %}" method="post"  class="vform">
   
   {{form.as_p}}
@@ -11,5 +8,3 @@
   </div>
 
 </form>
-</div>
-{% endblock %}
