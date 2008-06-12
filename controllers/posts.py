@@ -107,7 +107,7 @@ def show(request,key):
     if post is None:
       return http.HttpResponseNotFound("No Post exists with that key")
     return views.respond(request, user, 'posts/show',
-                       {'post': post})
+                       {'post': post.to_hash()})
   except(db.BadKeyError):
     return http.HttpResponseNotFound("No Post exists with that key")
     
