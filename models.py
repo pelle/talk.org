@@ -38,6 +38,9 @@ class Profile(db.Model):
   created = db.DateTimeProperty(auto_now_add=True)
   modified = db.DateTimeProperty(auto_now_add=True)
   
+  def key_s(self):
+    return str(self.key())
+    
   def increase_count(self,amount=None):
     if amount is None:
       amount=1
@@ -153,7 +156,7 @@ class Post(db.Model):
   modified = db.DateTimeProperty(auto_now_add=True)
   
   def to_hash(self): #Date should be parsable by Javascript Date.parse("Thu, 01 Jan 1970 00:00:00 GMT");
-    return {'id':str(self.key()),'body':self.safe_body(),'created':self.created.strftime("%a, %d %b %Y %H:%M:%S %Z"),'author_nick':self.author.nick,'author_name':self.author.name()}
+    return {'id':str(self.key()),'body':self.safe_body(),'created':self.created.strftime("%a, %d %b %Y %H:%M:%S %Z"),'author_nick':self.author.nick,'author_key':self.author.key_s(),'author_name':self.author.name()}
   
   def safe_body(self):
     return urlize(atify(escape(self.body)))

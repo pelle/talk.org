@@ -59,6 +59,15 @@ function load_latest(){
               post.append($('<span class="author"><a href="/profiles/'+escape(item.author_nick)+'\">'+item.author_name+'</a></span>'));
               post.append(' ');
               post.append($('<a href="/posts/'+item.id+'" class="timestamp" title="'+item.created+'">'+get_local_time_for_date(item.created)+'</a>'));
+              if (document.talk_user_key && document.talk_user_key==item.author_key) {
+                post.append(' ');
+                post.append($('<a href="/posts/'+item.id+'/edit" class="action">Edit</a>'));
+                post.append(' ');
+                var delLink=$('<a href="/posts/'+item.id+'/destroy" class="action destroy">Delete</a>').click(function(e){
+                  return confirm("Are you sure?");
+                });
+                post.append(delLink);
+              }
               post.appendTo("#post_list");
             });
           });

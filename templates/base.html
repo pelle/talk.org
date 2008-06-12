@@ -41,13 +41,16 @@
 			</div>
 	    <div id="footer">
 		    {% block footer %}
-				&copy; 2008 <a href="http://stakeventures.com">Stake Ventures Inc.</a> This code is highly experimental and whatever posts you create will likely be deleted.
+				&copy; 2008 <a href="http://stakeventures.com">Stake Ventures Inc.</a> This code is highly experimental and whatever posts you create will likely be deleted. Talk.org is Open Source follow the <a href="http://github.com/pelle/talk.org/tree/master">Talk.org Git Hub Project</a>.
 	    	{% endblock %}
 			</div>
 		</div>
     {% ifequal BUILD 'development' %}
     <script type="text/javascript" src="/javascripts/jquery-latest.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.blockUI.js"></script>
+		<script type="text/javascript">
+			document["talk_user_key"]="{{current_profile.key}}";
+		</script>
     <script type="text/javascript" src="/javascripts/talk.js"></script>
     {% else %}
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>

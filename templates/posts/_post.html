@@ -12,8 +12,10 @@
 	<a href="{%url controllers.posts.show post.id%}" class="timestamp" title="{{post.created}}">
 		{{post.created}}
 	</a>
-	{%ifequal user post.author.user%}
-	<a href="{%url controllers.posts.edit post.key %}" class="action">Edit</a>
-	<a href="{%url controllers.posts.destroy post.key %}" class="action destroy">Delete</a>
+	{%if current_profile%}
+	{%ifequal current_profile.key_s post.author_key%}
+	<a href="{%url controllers.posts.edit post.id %}" class="action">Edit</a>
+	<a href="{%url controllers.posts.destroy post.id %}" class="action destroy">Delete</a>
 	{%endifequal%}
+	{%endif%}
 </div>
